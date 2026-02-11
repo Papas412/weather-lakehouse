@@ -50,3 +50,5 @@ build/
 # AWS
 .aws-sam/
 packaged.yaml
+
+*.zip
