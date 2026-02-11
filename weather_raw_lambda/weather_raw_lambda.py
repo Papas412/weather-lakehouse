@@ -16,15 +16,17 @@ def lambda_handler(event, context):
 
     with urllib.request.urlopen(url) as response:
         raw_data = json.loads(response.read().decode())
+        payload = {
+        "extraction_timestamp": datetime.datetime.now().isoformat(),
+        "data": raw_data
+    }    
 
-    raw_data["extraction_timestamp"] = datetime.datetime.now().isoformat()
-
-    filename = f"weather_raw_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    filename = f"weather_raw_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
 
     s3.put_object(
         Bucket=BUCKET_NAME,
         Key=f"raw/{filename}",
-        Body=json.dumps(raw_data).encode(),
+        Body=json.dumps(payload).encode(),
         ContentType="application/json"
     )
 
